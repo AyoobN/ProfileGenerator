@@ -9,3 +9,4 @@ import pandas as pd
 df = pd.DataFrame({'First Name':firstName, 'Last Name':lastName, 'Gender':li, 'DOB':DOB})
 print(df)
 
+df.to_csv('export.csv', encoding='utf-8', index=False)
