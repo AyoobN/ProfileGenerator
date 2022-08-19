@@ -140,7 +140,7 @@ numberList = random.sample(range(1,99), num)
 
 while True:
     try:
-        recoveryCatchall = [f'{numberList}@fairmontmail.com'] * num
+        recoveryCatchall = [f'{numberList}@catchall.com'] * num
         break
     except ValueError:
         continue
@@ -148,7 +148,7 @@ while True:
 
 while True:
     try:
-        forwardingCatchall = ['@fairmontmail.com'] * num
+        forwardingCatchall = ['@catchall.com'] * num
         break
     except ValueError:
         continue
