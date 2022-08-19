@@ -1,56 +1,100 @@
 from datetime import datetime
-from numpy import true_divide
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
-from random import random, randrange
+from datetime import datetime
+from random import random
 import random
+import pandas as pd
+import os
+import sys
+from time import sleep
 
 
+#Type Writer Function
+def typewriter(text):
+    for i in text:
+        print(i, end = "")
+        sys.stdout.flush()
+        sleep(0.001)
+    print("\n")
+
+#Clear Console Function
+def cls():
+    os.system('cls' if os.name=='nt' else 'clear')
+
+print("""
+
+
+               .__                               
+__  _  __ ____ |  |   ____  ____   _____   ____  
+\ \/ \/ // __ \|  | _/ ___\/  _ \ /     \_/ __ \ 
+ \     /\  ___/|  |_\  \__(  <_> )  Y Y  \  ___/ 
+  \/\_/  \___  >____/\___  >____/|__|_|  /\___  >
+             \/          \/            \/     \/ 
+                                       
+                                                 
+                                                 
+""")
+sleep(1)
+
+cls()
 #input quantity of names
 while True:
     try:
-        num = int(input('Enter a number \n>>> '))
+        typewriter('\nHow many profiles would you like to generate?')
+        num = int(input('>>> '))
         break
     except ValueError:
-        print('Input integer only')
+        cls()
+        typewriter('Input integer only')
         continue
-print("num:", num)
+cls()
+print("Quantity:", num)
 
 
 #input gender choice
 while True:
-    answer = input('\nMale = M \nFemale = F \nBoth = B \n >>> ')
+    typewriter('Choose gender:')
+    answer = input('\nMale = M \nFemale = F \n >>> ')
     if answer.lower().strip() == 'm':
         gender = 2
         break
     elif answer.lower().strip() == 'f':
         gender = 3
         break
-    elif answer.lower().strip() == 'b':
-        gender = 1
-        break
+    # elif answer.lower().strip() == 'b':
+    #     gender = 1
+    #     break
     else:
-        print('Please enter gender again...')
+        cls()
+        typewriter('Please enter gender again...')
         continue
+cls()
+print("Quantity:", num)    
 print('gender: ', gender )
 
 #input name style
-while True: 
-    answer = int(input('\nPlease enter name style.... \n 1 - Common \n 2 - Average \n 3 - Rare\n>>> '))
+while True:
+    typewriter('What name style would you like?') 
+    answer = int(input('1 - Common \n 2 - Average \n 3 - Rare\n>>> '))
     if answer == 1:
         style = 1
+        style_name = 'Common'
         break
     elif answer == 2:
         style = 2
+        style_name = 'Average'
         break
     elif answer ==3:
         style = 3 
+        style_name = 'Rare'
         break
     else: 
-        print('\nPlease enter style number again....')
+        cls()
+        typewriter('\nPlease enter style number again....')
         continue
-print('style: ', style)
+cls()
+
 
 #gender column
 while True: 
@@ -74,8 +118,9 @@ output = str(soup.find_all('ol')[0].get_text())
 
 output = (output.strip("\n\t")).split()
 
-lastName = output[0::2]
-firstName = output[1::2]
+fullName = output
+firstName = output[0::2]
+lastName = output[1::2]
 
 
 #Random Birthday Generator
@@ -91,3 +136,61 @@ DOB = []
 for year, month, date in dateTimeThatIwant:
     DOB.append("%s-%s-%s" % (year, month, date))
 
+numberList = random.sample(range(1,99), num)
+
+while True:
+    try:
+        recoveryCatchall = [f'{numberList}@fairmontmail.com'] * num
+        break
+    except ValueError:
+        continue
+
+
+while True:
+    try:
+        forwardingCatchall = ['@fairmontmail.com'] * num
+        break
+    except ValueError:
+        continue
+
+
+#Attempt 1
+# recoveryMail = [list(e) for e in zip(firstName,lastName,recoveryCatchall,)]
+# print(recoveryCatchall)
+
+#Attemp 2
+# recoveryMail = []
+# for firstName,lastName,recoveryCatchall in zip(firstName,lastName,recoveryCatchall):
+#     recoveryMail['{}{}{}'.format(firstName,lastName,recoveryCatchall)]
+#     # print(recoveryMail)
+#     # recoveryMail.append("%s %s %s" % firstName,lastName,recoveryCatchall)
+#     print(recoveryMail)
+
+
+#Attempt 3
+
+recoveryMail = []
+fName = firstName
+lName = lastName
+
+for fName, lName, recoveryCatchall in zip(fName,lName,recoveryCatchall):
+    recoveryMail.append('{}{}{}'.format(fName,lName,recoveryCatchall))
+    
+   
+forwardingMail = []
+fname = firstName
+lname = lastName
+
+for fname, lname, forwardingCatchall in zip(fname,lname,forwardingCatchall):
+    forwardingMail.append('{}{}{}'.format(fname,lname,forwardingCatchall))
+    
+df = pd.DataFrame({'First Name':firstName, 'Last Name':lastName, 'Gender':li, 'DOB':DOB, 'Recovery Mail':recoveryMail, 'Forwarding Mail':forwardingMail})
+
+cls()
+print("Quantity:", num)
+print('Gender: ', gender )
+print('Style: ', style_name)
+
+typewriter('\n\nProcess complete \nOpen export.csv..........')
+
+df.to_csv('export.csv', encoding='utf-8', index=False)
